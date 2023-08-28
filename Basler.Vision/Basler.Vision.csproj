@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Emgu.CV" Version="4.2.0.3662" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.2.0.3662" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Basler.Base\Basler.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SiSoCsInterface">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Basler\FramegrabberSDK\lib\SiSoCsInterface.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

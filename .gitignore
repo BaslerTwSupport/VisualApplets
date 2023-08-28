@@ -1,0 +1,38 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# To ignore any directory named DirectoryB within a 
+# directory named DirectoryA with any number of 
+# directories in between, use ** between the directories
+
+
+# Ignoring directories
+# Both the directory itself and its contents will be ignored.
+packages/
+obj/
+bin/
+Debug/
+Release/
+.vs/
+.svn/
+
+# To ignore files only at the top level directory, but not in its
+# subdirectories, prefix the rule with a `/`
+/*.bat
+/*.sh
+/*.ps1
+/*.txt
+/*.db
+/*.py
+/*.bak
+/*.ndproj
+/*.jpg
+/*.csv
+/*.xml
+*.cs.bak
+*.bak
+*.clef
+*.sarif
+*.upgrade-assistant
+*.backup

@@ -1,0 +1,191 @@
+﻿<Window x:Class="Main.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Main"
+        xmlns:vm="clr-namespace:Main.ViewModels"
+        xmlns:res="clr-namespace:Basler.Text;assembly=Basler.Text"
+        xmlns:properties="clr-namespace:Main.Properties"
+        mc:Ignorable="d"
+        Title="Demo" Height="450" Width="800"
+        WindowStyle="ThreeDBorderWindow"
+        Loaded="MainWindow_OnLoaded"
+        Closing="Window_Closing"
+        Icon="pack://application:,,,/logo.png" FontSize="30"
+        Background="#0B2440">
+    <Window.DataContext >
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources >
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
+    </Window.Resources>
+
+    <Viewbox>
+        <Grid Height="550" Width="1020">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="102*"/>
+                <ColumnDefinition Width="185*"/>
+                <ColumnDefinition Width="108*"/>
+                <ColumnDefinition Width="115*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,370,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Image  Grid.Row="0" Margin="10 10" Stretch="Uniform" Source="pack://application:,,,/BASLER-Logo_white.png"/>
+                <Expander Grid.Row="1" Margin="10 10" VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True" BorderThickness="1" BorderBrush="White">
+                    <Expander.Header>
+                        <Label Content="Color" FontWeight="Bold" FontSize="12"/>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="25 0 0 0" Grid.Row="0" Grid.Column="0" Content="" FontSize="7"/>
+                            <Label Margin="10 0" Grid.Row="0" Grid.Column="1" Content="Min"/>
+                            <Label Margin="10 0" Grid.Row="0" Grid.Column="2" Content="Max"/>
+                            <Label Margin="25 0 0 0" Grid.Row="1" Grid.Column="0" Content="Hue"/>
+                            <TextBox Margin="10 1 10 1" Grid.Row="1" Grid.Column="1" Text="{Binding HueMin, Mode=TwoWay}" />
+                            <TextBox Margin="10 1 10 1" Grid.Row="1" Grid.Column="2" Text="{Binding HueMax, Mode=TwoWay}"/>
+                            <Label Margin="25 0 0 0" Grid.Row="2" Grid.Column="0" Content="Saturation"/>
+                            <TextBox Margin="10 1 10 1" Grid.Row="2" Grid.Column="1" Text="{Binding SaturationMin, Mode=TwoWay}"/>
+                            <TextBox Margin="10 1 10 1" Grid.Row="2" Grid.Column="2" Text="{Binding SaturationMax, Mode=TwoWay}"/>
+                            <Label Margin="25 0 0 0" Grid.Row="3" Grid.Column="0" Content="Intensity"/>
+                            <TextBox Margin="10 1 10 1" Grid.Row="3" Grid.Column="1" Text="{Binding IntensityMin, Mode=TwoWay}"/>
+                            <TextBox Margin="10 1 10 1" Grid.Row="3" Grid.Column="2" Text="{Binding IntensityMax, Mode=TwoWay}"/>
+                            <Label Margin="25 0 0 0" Grid.Row="4" Grid.Column="0" Content="Debayer"/>
+                            <ComboBox Margin="10 1 10 1" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" ItemsSource="{Binding DebayerFormatItems}" SelectedItem="{Binding SelectDebayerFormatItem, Mode=TwoWay}"/>
+                            <Label Margin="25 0 0 0" Grid.Row="5" Grid.Column="0" Content="Display"/>
+                            <ComboBox Margin="10 1 10 1" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Height="20" ItemsSource="{Binding DisplayItems}" SelectedItem="{Binding SelectDisplayItem, Mode=TwoWay}"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Grid.Row="2" Margin="10 10" VerticalAlignment="Stretch" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True" BorderThickness="1" BorderBrush="White">
+                    <Expander.Header>
+                        <Label Content="Others" FontWeight="Bold" FontSize="12"/>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="25 0 0 0" Grid.Row="0" Grid.Column="0" Content="Process by" FontSize="9"/>
+                            <ComboBox Margin="10 1 10 1" Grid.Row="0" Grid.Column="1" Width="76" Height="20" ItemsSource="{Binding DeviceItems}"  SelectedItem="{Binding SelectDeviceItem, Mode=TwoWay}"/>
+                            <CheckBox Margin="30 0 0 0" Grid.Row="1" Grid.ColumnSpan="2" Content="Display image" FontSize="10" IsChecked="{Binding EnableDisplayImage, Mode=TwoWay}" Foreground="White"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Grid.Row="3" Margin="10 10" VerticalAlignment="Top" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True" BorderThickness="1" BorderBrush="White" Visibility="Visible">
+                    <Expander.Header>
+                        <Label Content="Performance" FontWeight="Bold" FontSize="12"/>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="25 0 0 0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="CPU Usage" FontSize="16"/>
+                            <Label Margin="0 0 0 0" Grid.Row="0" Grid.Column="2" Content="{Binding CPUUsage}" FontSize="16"/>
+                            <Label Margin="25 0 0 0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="FPS" FontSize="16"/>
+                            <Label Margin="0 0 0 0" Grid.Row="1" Grid.Column="2" Content="{Binding FPS}" FontSize="16"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+                <Expander Grid.Row="4" Margin="10 10" VerticalAlignment="Top" ExpandDirection="Down" HorizontalContentAlignment="Left" SnapsToDevicePixels="True" BorderThickness="1" BorderBrush="Black" Visibility="Collapsed">
+                    <Expander.Header>
+                        <Label Content="Log"/>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ListBox Margin="25 5 0 2" Grid.Row="1" Grid.Column="1" Width="141" FontSize="10" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" ItemsSource="{Binding LogMessage}"/>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
+            </Grid>
+            <Grid Grid.Column="1" Grid.ColumnSpan="3" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.RowSpan="10" Grid.ColumnSpan="10" Background="Black" Margin="10 10">
+                        <Image Name="image" Stretch="Uniform" Source="{Binding DisplayImage, Mode=TwoWay}" MouseMove="Image_MouseMove">
+                        </Image>
+                    </Border>
+                    <Label Margin="10 10 0 0" Grid.Row="0" Grid.Column="0" Content="{Binding ProcessByDevice}" Foreground="Orange" FontSize="20"/>
+                    <Label Margin="10 20 0 0" Grid.Row="9" Grid.Column="0" Content="{Binding Fps}" Foreground="Orange"/>
+                    <Label Margin="0 0 0 0" Grid.Row="9" Grid.Column="6" Content="{Binding Xy}" Foreground="Orange" Width="100"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Viewbox>
+</Window>
