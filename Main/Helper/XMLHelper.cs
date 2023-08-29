@@ -4,33 +4,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using System.Xml;
 
 namespace Main.Helper
 {
     public static class XmlHelper
     {
-        //public static bool Compare(string source, string changed)
-        //{
-        //    XmlDocument sourceDoc = new XmlDocument();
-        //    sourceDoc.LoadXml(source);
-        //    XmlNode sourceNode = sourceDoc.DocumentElement;
-
-        //    XmlDocument changedDoc = new XmlDocument();
-        //    changedDoc.LoadXml(changed);
-        //    XmlNode changedNode = changedDoc.DocumentElement;
-
-        //    XmlDiff xmlDiff = new XmlDiff(XmlDiffOptions.IgnoreChildOrder | XmlDiffOptions.IgnoreComments | XmlDiffOptions.IgnoreWhitespace);
-
-        //    var isDiff = xmlDiff.Compare(sourceNode, changedNode);
-
-        //    return isDiff;
-        //}
-
         /// <summary>
         /// Convert generic type which had IFormattable to string.
         /// </summary>

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Main.Helper;
-using Main.Models;
-using Basler.Text;
 using Basler.Base.Data;
 using Basler.Vision;
 using System.Threading;
@@ -19,10 +15,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using Basler.Base;
 using Point = System.Drawing.Point;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Media.Media3D;
-using System.Drawing.Drawing2D;
 
 namespace Main.ViewModels
 {
@@ -509,30 +501,15 @@ namespace Main.ViewModels
                     Xy = "";
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
         private byte[] CPUProcess(IntPtr img)
         {
             return VisionHandler.Instance.HSIClass.Execute((img, _size.Width, _size.Height), (SelectDisplayItem, SelectDebayerFormatItem,
                 new Point(HueMin, HueMax), new Point(SaturationMin, SaturationMax), new Point(IntensityMin, IntensityMax)));
-        }
-        private void AddLog(string msg)
-        {
-            this.DispatchToUi(() =>
-            {
-                if (LogMessage.Count > 50)
-                {
-                    LogMessage.RemoveAt(LogMessage.Count - 1);
-                }
-                if (LogMessage.Count > 0)
-                    LogMessage.Insert(0, msg);
-                else
-                    LogMessage.Add(msg);
-                OnPropertyChanged("LogMessage");
-            });
         }
     }
 }

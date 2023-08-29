@@ -1,15 +1,9 @@
 ﻿using Basler.Base;
 using Basler.Base.Data;
-using Basler.Vision;
 using Main.Helper;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Main
@@ -17,6 +11,9 @@ namespace Main
     internal class ConfigHandler
     {
         private static ConfigHandler _instance;
+        /// <summary>
+        /// Save system file in executable exist path.
+        /// </summary>
         private static string SystemFile = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\System.xml";
         internal static ConfigHandler Instance => _instance ?? (_instance = new ConfigHandler());
         internal ConfigHandler()

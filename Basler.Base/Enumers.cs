@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Basler.Base
+﻿namespace Basler.Base
 {
     public enum PixelFormat
     {

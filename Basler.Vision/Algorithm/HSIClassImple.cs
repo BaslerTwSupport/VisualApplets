@@ -3,16 +3,8 @@ using Emgu.CV.Structure;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using Basler.Base;
-using Emgu.CV.Ocl;
-using Emgu.CV.Util;
 
 namespace Basler.Vision.Algorithm
 {
@@ -22,8 +14,8 @@ namespace Basler.Vision.Algorithm
         private Mat _kernel11x11;
         public HSIClassImple()
         {
-            _kernel5x5 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Rectangle, new Size(5, 5), new Point(2, 2));
-            _kernel11x11 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Rectangle, new Size(11, 11), new Point(2, 2));
+            _kernel5x5 = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(5, 5), new Point(2, 2));
+            _kernel11x11 = CvInvoke.GetStructuringElement(ElementShape.Rectangle, new Size(11, 11), new Point(2, 2));
         }
         public byte[] Execute((IntPtr bytes, int width, int height) image, (ResultSelection result, PixelFormat pxielFormat, Point H, Point S, Point I) p)
         {
@@ -120,7 +112,6 @@ namespace Basler.Vision.Algorithm
                 i?.Dispose();
                 opening?.Dispose();
                 closing?.Dispose();
-                //Marshal.FreeHGlobal(buffer);
             }
         }
     }
