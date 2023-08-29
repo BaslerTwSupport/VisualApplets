@@ -33,7 +33,14 @@ namespace Main.ViewModels
         private bool _isTaskRunning;
         private string[] _processByDeviceMsg;
         private WriteableBitmap _wbmp;
+        /// <summary>
+        /// Image windows size in UI. If camera image size is 5000 x 5000 then UI refresh time is slow.
+        /// So image window size = image size / 4 for speed.
+        /// </summary>
         private Int32Rect _rect;
+        /// <summary>
+        /// Camera image size.
+        /// </summary>
         private System.Drawing.Size _size;
         private int _updateCount;
         private Task[] _process;
@@ -337,7 +344,7 @@ namespace Main.ViewModels
             _Siso.StartAcquisition();
             _isTaskRunning = true;
             _cancelToken = new CancellationTokenSource();
-            _wbmp = new WriteableBitmap(1248, 1280, 96, 96, PixelFormats.Gray8, null);
+            _wbmp = new WriteableBitmap(_size.Width/4, _size.Height/4, 96, 96, PixelFormats.Gray8, null);
             _rect = new Int32Rect(0,0, (int)_wbmp.Width, (int)_wbmp.Height);
             DisplayImage = _wbmp;
             _now = DateTime.Now;
@@ -348,9 +355,6 @@ namespace Main.ViewModels
                     {
                         break;
                     }
-                    //var now1 = DateTime.Now;
-                    //var byteImg = SelectDeviceItem == Device.FPGA ? _Siso.GetImage(0) :
-                    //CPUProcess(_Siso.GetImage(0));
                     if(SelectDeviceItem == Device.FPGA)
                     {
                         FPGATask(_Siso.GetImage(0));
@@ -359,29 +363,6 @@ namespace Main.ViewModels
                     {
                         CPUTask(_Siso.GetImage(0));
                     }
-                    
-                    //var msImg = (DateTime.Now - now1).TotalMilliseconds;
-                    
-                    //fps++;
-                    //index++;
-                    //var ms = (DateTime.Now - now).TotalMilliseconds;
-                    //now1 = DateTime.Now;
-                    //ImageByte = byteImg;
-                    //Task.Run(() => {
-                    //    Refresh(byteImg);
-                    //});                    
-                    //var msUI = (DateTime.Now - now1).TotalMilliseconds;
-                    //if (ms >= 1000)
-                    //{
-                    //    fps = fps - 2;
-                    //    pct = myAppCpu.NextValue() / Environment.ProcessorCount;
-                    //    Fps = $"FPS: {fps:##}. CPU={pct:##}%";
-                    //    now = DateTime.Now;
-                    //    Log.Info($"{index},fps,{fps:##},CPU,{pct:##}");
-                    //    fps = 0;
-                    //}
-                    ////pct1 = Convert.ToInt32(myAppCpu.NextValue() / Environment.ProcessorCount);
-                    //Log.Debug($"{index},Image,{msImg:##},UI,{msUI:##}");
                 }
             }, _cancelToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
@@ -455,7 +436,7 @@ namespace Main.ViewModels
                 Marshal.Copy(img, 0, ptr, img.Length);
                 var simg = VisionHelper.Resize(ptr, _size.Width, _size.Height, _rect.Width, _rect.Height);
                 Marshal.FreeHGlobal(ptr);
-                Refresh(simg);
+                Refresh(img);
             });
         }
 
@@ -518,11 +499,6 @@ namespace Main.ViewModels
                      SelectDisplayItem == ResultSelection.Saturation ||
                      SelectDisplayItem == ResultSelection.Intensity))
                 {
-                    //var stride = y * w * 3;
-                    //var x3 = x * 3;
-                    //var r = SelectDeviceItem == Device.CPU ? img[stride + x3]: img[stride + x3+ 2];
-                    //var g = SelectDeviceItem == Device.CPU ? img[stride + x3 + 1] : img[stride + x3 + 1];
-                    //var b = SelectDeviceItem == Device.CPU ? img[stride + x3 + 2] : img[stride + x3 ];
                     var stride = y * w;
                     var g = SelectDeviceItem == Device.CPU ? img[stride + x] : img[stride + x];
                     var hsi = SelectDisplayItem == ResultSelection.Hue ? "Hue" : SelectDisplayItem == ResultSelection.Saturation ? "Saturation" : "Intensity";

@@ -31,9 +31,8 @@ namespace Basler.Vision.Algorithm
             var imgRGB = new Image<Bgr, byte>(image.width, image.height);
             var imgHsv = new Image<Bgr, byte>(image.width, image.height);
             Image<Gray, byte>[] images = null;
-            Image<Gray, byte> r, s, i, opening, closing;
+            Image<Gray, byte>  r, s, i, opening, closing;           
             r = null; s = null; i = null; opening = null; closing = null;
-            //var buffer = IntPtr.Zero;
             try
             {
                 var format = ColorConversion.BayerBg2Rgb;
@@ -53,8 +52,6 @@ namespace Basler.Vision.Algorithm
                 {
                     format = ColorConversion.BayerRg2Rgb;
                 }
-                //buffer = Marshal.AllocHGlobal(image.bytes.Length);
-                //Marshal.Copy(image.bytes, 0, buffer, image.bytes.Length);
                 imgBayer = new Image<Gray, byte>(image.width, image.height, image.width, image.bytes);
                 CvInvoke.CvtColor(imgBayer, imgRGB, format);
                 if(p.result == ResultSelection.Red)
@@ -69,35 +66,41 @@ namespace Basler.Vision.Algorithm
                 {
                     return imgRGB.Split()[2].Bytes;
                 }
-                CvInvoke.CvtColor(imgRGB, imgHsv, ColorConversion.Bgr2Hsv);
+                CvInvoke.CvtColor(imgRGB, imgHsv, ColorConversion.Rgb2HsvFull);
+                images = imgHsv.Split();
                 if (p.result == ResultSelection.Hue)
                 {
-                    return imgHsv.Split()[0].Bytes;
+                    return images[2].Bytes;
                 }
                 else if (p.result == ResultSelection.Saturation)
                 {
-                    return imgHsv.Split()[1].Bytes;
+                    return images[1].Bytes;
                 }
                 else if (p.result == ResultSelection.Intensity)
                 {
-                    return imgHsv.Split()[2].Bytes;
+                    return images[0].Bytes;
                 }
-                images = imgHsv.Split();
-                var hT = images[0].ThresholdBinary(new Gray(p.H.X), new Gray(p.H.Y));
-                var sT = images[1].ThresholdBinary(new Gray(p.S.X), new Gray(p.S.Y));
-                var vT = images[2].ThresholdBinary(new Gray(p.I.X), new Gray(p.I.Y));
-                var t = (hT & sT) & (hT & vT);
+                var gMax = new Gray(255);
+                var hTMin = images[2].ThresholdBinary(new Gray(p.H.X), gMax);
+                var hTMax = images[2].ThresholdBinaryInv(new Gray(p.H.Y), gMax);
+                var hT = hTMin & hTMax;
+                var sTMin = images[1].ThresholdBinary(new Gray(p.S.X), gMax);
+                var sTMax = images[1].ThresholdBinaryInv(new Gray(p.S.Y), gMax);
+                var sT = sTMin & sTMax;
+                var vTMin = images[0].ThresholdBinary(new Gray(p.I.X), gMax);
+                var vTMax = images[0].ThresholdBinaryInv(new Gray(p.I.Y), gMax);
+                var vT = vTMin & vTMax;
+                var t = hT & sT & vT;
+                hTMin?.Dispose(); hTMax?.Dispose(); hT?.Dispose();
+                sTMin?.Dispose(); sTMax?.Dispose(); sT?.Dispose();
+                vTMin?.Dispose(); vTMax?.Dispose(); vT?.Dispose();
                 //return t.Bytes;
                 opening = new Image<Gray, byte>(t.Size);
                 closing = new Image<Gray, byte>(t.Size);
                 CvInvoke.MorphologyEx(t, opening, MorphOp.Open, _kernel5x5, new Point(1, 1), 1, BorderType.Default, new MCvScalar(0));
                 CvInvoke.MorphologyEx(opening, closing, MorphOp.Close, _kernel11x11, new Point(1, 1), 1, BorderType.Default, new MCvScalar(0));
                 r = closing.ThresholdBinary(new Gray(1), new Gray(255));
-                //s = images[1] & closing;
-                //i = images[2] & closing;
-                //imgHsv.Dispose();
-                //imgHsv = new Image<Bgr, byte>(image.width, image.height);
-                //CvInvoke.Merge(new VectorOfMat(r.Mat, r.Mat, r.Mat), imgHsv.Mat);
+                t?.Dispose();
                 return r.Bytes;
             }
             finally
