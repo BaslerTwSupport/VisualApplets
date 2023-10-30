@@ -62,7 +62,7 @@ namespace Basler.Vision.Algorithm
                 images = imgHsv.Split();
                 if (p.result == ResultSelection.Hue)
                 {
-                    return images[2].Bytes;
+                    return images[0].Bytes;
                 }
                 else if (p.result == ResultSelection.Saturation)
                 {
@@ -70,17 +70,17 @@ namespace Basler.Vision.Algorithm
                 }
                 else if (p.result == ResultSelection.Intensity)
                 {
-                    return images[0].Bytes;
+                    return images[2].Bytes;
                 }
                 var gMax = new Gray(255);
-                var hTMin = images[2].ThresholdBinary(new Gray(p.H.X), gMax);
-                var hTMax = images[2].ThresholdBinaryInv(new Gray(p.H.Y), gMax);
+                var hTMin = images[0].ThresholdBinary(new Gray(p.H.X), gMax);
+                var hTMax = images[0].ThresholdBinaryInv(new Gray(p.H.Y), gMax);
                 var hT = hTMin & hTMax;
                 var sTMin = images[1].ThresholdBinary(new Gray(p.S.X), gMax);
                 var sTMax = images[1].ThresholdBinaryInv(new Gray(p.S.Y), gMax);
                 var sT = sTMin & sTMax;
-                var vTMin = images[0].ThresholdBinary(new Gray(p.I.X), gMax);
-                var vTMax = images[0].ThresholdBinaryInv(new Gray(p.I.Y), gMax);
+                var vTMin = images[2].ThresholdBinary(new Gray(p.I.X), gMax);
+                var vTMax = images[2].ThresholdBinaryInv(new Gray(p.I.Y), gMax);
                 var vT = vTMin & vTMax;
                 var t = hT & sT & vT;
                 hTMin?.Dispose(); hTMax?.Dispose(); hT?.Dispose();
