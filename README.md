@@ -25,3 +25,6 @@ https://github.com/BaslerTwSupport/VisualApplets/blob/3587b96027e5846b994366c30d
 5. Check result by switch **Display** to **Result**.
 6. Select **Process by** to **CPU** in in expander **Others**. Do it again as step 1 to step 5.
 The parameters will save to **System.xml** after closed application.
+
+## Support
+If you still have any questions please contact [Balser Support](https://www.baslerweb.com/en-us/support/contact/)
